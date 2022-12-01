@@ -6,4 +6,4 @@ all_elves.each do |elf|
 end
 
 puts sums.max
-puts sums.sort[-3..-1].sum
+puts sums.sort[-3..].sum
