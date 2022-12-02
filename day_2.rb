@@ -11,7 +11,7 @@ all_lines.each do |line|
   line_score += 3 if p2 == p1
   line_score += 6 if ((p2 - p1) % 3) == 1
 
-  total += line_score
+  total += line_score # or in one line: total += p2 + 1 + [3,6,0][((p2 - p1) % 3)]
 end
 puts total
 
