@@ -2,11 +2,9 @@ all_lines = File.read('day_3_input.txt').split("\n")
 # all_lines = File.read('day_3_test_input.txt').split("\n")
 
 def priority(el)
-  if ('a'..'z').include?(el)
-    return el.ord - 'a'.ord + 1
-  else 
-    return el.ord - 'A'.ord + 27
-  end
+  return el.ord - 'a'.ord + 1  if ('a'..'z').include?(el)
+  return el.ord - 'A'.ord + 27 if ('A'..'Z').include?(el)
+  0
 end
 
 sum = 0
@@ -21,7 +19,8 @@ puts sum
 # part 2
 sum = 0
 all_lines.each_slice(3) do |g|
-  combined = g[0].split("").uniq & g[1].split("").uniq & g[2].split("").uniq
+  # or:  combined = g[0].split("").uniq & g[1].split("").uniq & g[2].split("").uniq
+  combined = g.collect {|e| e.split("").uniq }.reduce(:&)
   sum += priority(combined[0])
 end
 puts sum
