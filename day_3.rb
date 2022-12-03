@@ -12,8 +12,7 @@ end
 sum = 0
 all_lines.each do |line|
   ll = line.size / 2
-  first_half = line[0..ll-1]
-  second_half = line[ll..-1]
+  first_half, second_half = line[0..ll-1], line[ll..-1]
   combined = first_half.split("").uniq & second_half.split("").uniq
   sum += priority(combined[0])
 end
