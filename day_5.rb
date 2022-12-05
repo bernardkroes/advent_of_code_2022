@@ -15,9 +15,9 @@ end
 # do the  moves
 instructions.split("\n").each do |line|
   num, source, dest = line.gsub(/[a-z]*/,"").split(" ").map(&:to_i)
-  stacks[dest - 1] += stacks[source-1][(-1*num)..].reverse   # this line for part 1
-  # stacks[dest - 1] += stacks[source-1][(-1*num)..]         # this line for part 2
-  stacks[source - 1] = stacks[source - 1][0..(-1*num -1)]
+  stacks[dest - 1] += stacks[source - 1][(-num)..].reverse   # this line for part 1
+  # stacks[dest - 1] += stacks[source - 1][(-num)..]         # this line for part 2
+  stacks[source - 1] = stacks[source - 1][0..(-num -1)]
 end
 
 puts stacks.collect { |s| s[-1] }.join
