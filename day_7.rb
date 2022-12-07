@@ -2,38 +2,32 @@ lines = File.read('day_7_input.txt').split("\n")
 # lines = File.read('day_7_test_input.txt').split("\n")
 
 sizes = {}
-cur_dir = "/"
-sizes[cur_dir] = 0
+dirs =["root"] # a stack of dirnames that we have followd
+
+sizes[dirs.join("/")] = 0
 lines.each do |line|
   if line == "$ cd /"
-    cur_dir = "/"
+    dirs =["root"]
   elsif line.start_with?("$ cd ")
     if line == "$ cd .."
-      cur_dir = cur_dir[0..(cur_dir.rindex("/") - 1)]
+      dirs.pop
     else
-      cur_dir += "/" + line.gsub("$ cd ","")
+      dirs.push(line.split.last)
     end
-    sizes[cur_dir] = 0 unless sizes.has_key?(cur_dir)
-  elsif line.gsub(/[^0-9]*/,"").to_i > 0
-    the_size = line.gsub(/[^0-9]*/,"").to_i
-    sizes.each do |k, v|
-      sizes[k] += the_size if cur_dir.start_with?(k)
+    sizes[dirs.join("/")] ||= 0
+  else # it is a file
+    filesize = line.gsub(/[^0-9]*/,"").to_i
+    dirs.each_with_index do |_,i|
+      key = dirs[0..i].join("/")
+      sizes[key] += filesize
     end
   end
 end
 
-total = 0
-sizes.each do |k, v|
-  total += v if v < 100000
-end
-puts total
+# part 1
+puts sizes.values.select { |v| v < 100000 }.sum
 
-unused_space = 70000000 - sizes["/"]
+# part 2
+unused_space = 70000000 - sizes["root"]
 required_extra_space = 30000000 - unused_space
-smallest = 30000000
-sizes.each do |k, v|
-  if v > required_extra_space && v < smallest
-    smallest = v
-  end
-end
-puts smallest
+puts sizes.values.select { |v| v > required_extra_space }.min
