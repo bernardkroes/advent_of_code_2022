@@ -35,36 +35,36 @@ grid.transpose.each_with_index do |line, x|
     end
   end
 end
-puts found.keys.size
+puts found.size
 
 # part 2
 max_score = 0
 grid.each_with_index do |line, y|
   line.each_with_index do |height, x|
     score = 0
-    h1, h2, h3, h4 = 0, 0, 0, 0
+    left, right, up, down = 0, 0, 0, 0
 
     (x-1).downto(0) do |walk_x| # to the left
-      h1 += 1
+      left += 1
       break if line[walk_x] >= height
     end
 
     (x+1).upto(the_size - 1) do |walk_x| # to the right
-      h2 += 1
+      right += 1
       break if line[walk_x] >= height
     end
 
     (y-1).downto(0) do |walk_y| # upwards
-      h3 += 1
+      up += 1
       break if grid[walk_y][x] >= height
     end
 
     (y+1).upto(the_size - 1) do |walk_y| # downwards
-      h4 += 1
+      down += 1
       break if grid[walk_y][x] >= height
     end
 
-    score = h1 * h2 * h3 * h4
+    score = left * right * up * down
     max_score = score if score > max_score
   end
 end
