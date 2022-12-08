@@ -17,7 +17,7 @@ grid.each_with_index do |line, y|
     if x == 0 || x == the_size - 1
       found[key_for(x,y)] = 1
     else
-      if height > line[0..(x-1)].max || height > line[(x+1)..-1].max
+      if height > line[0...x].max || height > line[(x+1)..].max
         found[key_for(x,y)] = 1
       end
     end
@@ -29,7 +29,7 @@ grid.transpose.each_with_index do |line, x|
     if y == 0 || y == the_size - 1
       found[key_for(x,y)] = 1
     else
-      if height > line[0..(y-1)].max || height > line[(y+1)..-1].max
+      if height > line[0...y].max || height > line[(y+1)..].max
         found[key_for(x,y)] = 1
       end
     end
