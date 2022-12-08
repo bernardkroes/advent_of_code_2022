@@ -41,7 +41,6 @@ puts found.size
 max_score = 0
 grid.each_with_index do |line, y|
   line.each_with_index do |height, x|
-    score = 0
     left, right, up, down = 0, 0, 0, 0
 
     (x-1).downto(0) do |walk_x| # to the left
