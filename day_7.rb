@@ -13,7 +13,7 @@ lines.each do |line|
     else
       dirs.push(line.split.last)
     end
-  else # it is a file (or ls command that does not contain any digits)
+  else # it is a file (or ls command, but that does not contain any digits hopefully)
     filesize = line.gsub(/[^0-9]*/,"").to_i
     1.upto(dirs.size) do |i|
       key = dirs.first(i).join("/")
