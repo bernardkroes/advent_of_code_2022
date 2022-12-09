@@ -17,11 +17,7 @@ class Grid
     end
 
     @tail_visited = {}
-    @tail_visited[key_for(@knots.last[0], @knots.last[1])] = 1
-  end
-
-  def key_for(x,y)
-    "#{x}_#{y}"
+    @tail_visited[@knots.last.dup] = 1
   end
 
   # by knot-index
@@ -50,7 +46,7 @@ class Grid
     1.upto(@knots.size-1) do |i|
       move_tail_knot(i, i-1)
     end
-    @tail_visited[key_for(@knots.last[0], @knots.last[1])] = 1
+    @tail_visited[@knots.last.dup] = 1
   end
 
   def do_move(in_dir)
