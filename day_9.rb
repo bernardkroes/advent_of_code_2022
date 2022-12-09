@@ -29,21 +29,26 @@ class Grid
     ((@knots[i][0] - @knots[j][0]).abs < 2) && ((@knots[i][1] - @knots[j][1]).abs < 2)
   end
 
-  # by knot-index, h follows t
+  # by knot-index, t follows h
   def move_tail_knot(t,h)
     return if knots_adjacent?(t,h)
 
-    delta_0 = (@knots[h][0] > @knots[t][0] ? 1 : -1)
-    delta_0 = 0 if @knots[h][0] == @knots[t][0]
-    delta_1 = (@knots[h][1] > @knots[t][1] ? 1 : -1)
-    delta_1 = 0 if @knots[h][1] == @knots[t][1]
+#    used this at first:
+#    delta_0 = (@knots[h][0] > @knots[t][0] ? 1 : -1)
+#    delta_0 = 0 if @knots[h][0] == @knots[t][0]
+#    delta_1 = (@knots[h][1] > @knots[t][1] ? 1 : -1)
+#    delta_1 = 0 if @knots[h][1] == @knots[t][1]
+
+    delta_0 = @knots[h][0] <=> @knots[t][0]
+    delta_1 = @knots[h][1] <=> @knots[t][1]
+
     @knots[t][0] += delta_0
     @knots[t][1] += delta_1
   end
 
   def move_tail_knots
-    @knots[1..].each_with_index do |k,i|
-      move_tail_knot(i+1, i)
+    1.upto(@knots.size-1) do |i|
+      move_tail_knot(i, i-1)
     end
     @tail_visited[key_for(@knots[-1][0], @knots[-1][1])] = 1
   end
