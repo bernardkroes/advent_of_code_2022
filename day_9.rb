@@ -105,9 +105,9 @@ end
 lines = File.read('day_9_input.txt').split("\n")
 
 # part 1
-#g = Grid.new(2)
-#g.do_moves(lines)
-#puts g.tail_visited.count
+g = Grid.new(2)
+g.do_moves(lines)
+puts g.tail_visited.count
 
 # part 2
 g = Grid.new(10)
