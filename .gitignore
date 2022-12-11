@@ -1,5 +1,6 @@
 *.gem
 *.rbc
+*_input.txt
 /.config
 /coverage/
 /InstalledFiles
