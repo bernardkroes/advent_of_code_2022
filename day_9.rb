@@ -61,20 +61,28 @@ class Grid
       count.to_i.times do |i|
         do_move(dir)
       end
-# show grid terminal animation disabled, need a bigger monitor
-#      show_grid
-#      sleep(0.03/24.0)
+      # show grid terminal animation disabled, need a bigger monitor
+#       show_grid
+#       sleep(3.0/24.0)
     end
   end
 
   # show grid in the terminal window
   def show_grid
-    the_min_x, the_max_x = @knots.collect { |k| k[0] }.minmax
-    @min_x = the_min_x if the_min_x < @min_x
-    @max_x = the_max_x if the_max_x > @max_x
-    the_min_y, the_max_y = @knots.collect { |k| k[1] }.minmax
-    @min_y = the_min_y if the_min_y < @min_y
-    @max_y = the_max_y if the_max_y > @max_y
+    head = @knots.first
+
+#     the_min_x, the_max_x = @knots.collect { |k| k[0] }.minmax
+#     @min_x = the_min_x if the_min_x < @min_x
+#     @max_x = the_max_x if the_max_x > @max_x
+#     the_min_y, the_max_y = @knots.collect { |k| k[1] }.minmax
+#     @min_y = the_min_y if the_min_y < @min_y
+#     @max_y = the_max_y if the_max_y > @max_y
+
+    @min_x = head[0] - 100 # if @min_x < head[0] - 50
+    @max_x = head[0] + 100 # if @max_x > head[0] + 50
+
+    @min_y = head[1] - 50 # if @min_y < head[1] - 50
+    @max_y = head[1] + 50 # if @max_y > head[1] + 50
 
     puts "\e[H\e[2J" # clear the terminal for more fun
     @max_y.downto(@min_y) do |y|
@@ -92,7 +100,7 @@ class Grid
           else
             the_line += "#{the_knot+1}"
           end
-        elsif @tail_visited.has_key?(key_for(x, the_y))
+        elsif @tail_visited.has_key?([x, the_y])
           the_line += "#"
         else
           the_line += "."
