@@ -12,19 +12,11 @@ class Monkey
     @inspected = 0
   end
 
-  def do_round_part1(in_monkeys)
+  def do_round(in_monkeys, reducor) # reducor is: v / 3 (part 1) or: v % all_check_primes_multiplied
     @items.each_with_index do |item, i|
       @inspected += 1
-      the_val = apply_operation(item) / 3
-      in_monkeys[the_val % @divisor == 0 ? @next_true : @next_false].items << the_val
-    end
-    @items = []
-  end
-
-  def do_round_part2(in_monkeys, modulo)
-    @items.each_with_index do |item, i|
-      @inspected += 1
-      the_val = apply_operation(item) % modulo
+      the_val = apply_operation(item)
+      the_val = reducor.call(the_val)
       in_monkeys[the_val % @divisor == 0 ? @next_true : @next_false].items << the_val
     end
     @items = []
@@ -62,7 +54,7 @@ monkeys_part2 = Marshal.load(Marshal.dump(monkeys)) # make a copy for part 2
 # part 1
 20.times do |round|
   monkeys.each do |monkey|
-    monkey.do_round_part1(monkeys)
+    monkey.do_round(monkeys, ->(v) { v / 3 })
   end
 end
 inspected = monkeys.collect { |m| m.inspected }.sort.reverse
@@ -71,7 +63,7 @@ puts inspected[0] * inspected[1]
 # part 2, use the copied monkeys
 10000.times do |round|
   monkeys_part2.each do |monkey|
-    monkey.do_round_part2(monkeys_part2, modulo_div)
+    monkey.do_round(monkeys_part2, ->(v) { v % modulo_div })
   end
 end
 inspected = monkeys_part2.collect { |m| m.inspected }.sort.reverse
@@ -82,6 +74,6 @@ __END__
 Monkey 0:
   Starting items: 79, 98
   Operation: new = old * 19
-  Test: 
+  Test: divisible by 23
     If true: throw to monkey 2
     If false: throw to monkey 3
