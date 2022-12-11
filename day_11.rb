@@ -23,8 +23,7 @@ class Monkey
   end
 
   def apply_operation(old)
-    new = eval(@oper)
-    new
+    eval(@oper)
 
   # hard-coded: ugly (?) but got me there the fastest (and runs faster)
 #   new = case @number
