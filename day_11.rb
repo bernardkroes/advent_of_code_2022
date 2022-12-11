@@ -1,31 +1,30 @@
 
 class Monkey
-  attr_accessor :number, :items, :inspected, :modulo_size
+  attr_accessor :number, :items, :divisor, :inspected
 
-  def initialize(in_num, in_items, oper, divisor, next_true, next_false)
-    @number = in_num
-    @items =  in_items.dup
-    @oper = oper
-    @divisor = divisor
-    @next_true = next_true
-    @next_false = next_false
+  def initialize(in_lines)
+    @number = in_lines[0].scan(/\d+/).first.to_i
+    @items = in_lines[1].gsub(/[^0-9\,]/,"").split(",").map(&:to_i)
+    @oper = in_lines[2].gsub("  Operation: new = ","")
+    @divisor = in_lines[3].scan(/\d+/).first.to_i
+    @next_true = in_lines[4].scan(/\d+/).first.to_i
+    @next_false = in_lines[5].scan(/\d+/).first.to_i
     @inspected = 0
-
-    @modulo_size = @divisor
   end
 
-  def get_info
-    puts "=== Monkey #{@number}"
-    puts @items.inspect
-    puts "Div: #{@divisor}"
-    puts "Next if true: #{@next_true}"
-    puts "Next if false: #{@next_false}"
-  end
-
-  def do_round(in_monkeys)
+  def do_round_part1(in_monkeys)
     @items.each_with_index do |item, i|
       @inspected += 1
-      the_val = do_operand(item)
+      the_val = do_operand(item) / 3
+      in_monkeys[the_val % @divisor == 0 ? @next_true : @next_false].items << the_val
+    end
+    @items = []
+  end
+
+  def do_round_part2(in_monkeys, modulo)
+    @items.each_with_index do |item, i|
+      @inspected += 1
+      the_val = do_operand(item) % modulo
       in_monkeys[the_val % @divisor == 0 ? @next_true : @next_false].items << the_val
     end
     @items = []
@@ -33,9 +32,10 @@ class Monkey
 
   def do_operand(old)
     new = eval(@oper)
+    new
 
-  # hard-coded: ugly (?) but got me there the fastest
-#     case @number
+  # hard-coded: ugly (?) but got me there the fastest (and runs faster)
+#   new = case @number
 #       when 0 then old * 5
 #       when 1 then old * 11
 #       when 2 then old + 2
@@ -45,41 +45,39 @@ class Monkey
 #       when 6 then old + 6
 #       when 7 then old + 7
 #     end
-
-    # new / 3            # use this for part 1
-    new % @modulo_size   # use this for part 2
+#    new
   end
 end
 
 monkey_lines = File.read('day_11_input.txt').split("\n\n")
 
 monkeys = []
-modulo_div = 1
 monkey_lines.each_with_index do |lines,i|
-  split_lines = lines.split("\n")
-
-  the_num = split_lines[0].scan(/\d+/).first.to_i
-  the_items = split_lines[1].gsub(/[^0-9\,]/,"").split(",").map(&:to_i)
-  the_oper = split_lines[2].gsub("  Operation: new = ","")
-  the_div = split_lines[3].scan(/\d+/).first.to_i
-  next_true = split_lines[4].scan(/\d+/).first.to_i
-  next_false = split_lines[5].scan(/\d+/).first.to_i
-
-  monkeys << Monkey.new(the_num, the_items, the_oper, the_div, next_true, next_false)
-  modulo_div *= the_div
-end
-monkeys.each do |m|
-  m.modulo_size = modulo_div
+  monkey = Monkey.new(lines.split("\n"))
+  monkeys << monkey
 end
 
-# monkeys.each do |m|
-#   m.get_info
-# end
-
-# part 2
-10000.times do |round| # part 1: 20.times
+# part 1
+20.times do |round|
   monkeys.each do |monkey|
-    monkey.do_round(monkeys)
+    monkey.do_round_part1(monkeys)
+  end
+end
+inspected = monkeys.collect { |m| m.inspected }.sort.reverse
+puts inspected[0] * inspected[1]
+
+# part 2, just parse the monkeys again to reset items to the originals
+modulo_div = 1
+monkeys = []
+monkey_lines.each_with_index do |lines,i|
+  monkey = Monkey.new(lines.split("\n"))
+  monkeys << monkey
+  modulo_div *= monkey.divisor
+end
+
+10000.times do |round|
+  monkeys.each do |monkey|
+    monkey.do_round_part2(monkeys, modulo_div)
   end
 end
 inspected = monkeys.collect { |m| m.inspected }.sort.reverse
