@@ -77,23 +77,50 @@ all_lines << "[[6]]"
 sorted_lines = all_lines.sort { |i,j| in_order?(Packet.new(i), Packet.new(j)) }.reverse
 puts (sorted_lines.index("[[2]]") + 1) * (sorted_lines.index("[[6]]") + 1)
 
-__END__
+###############################
+#
+# here is a rewrite using eval:
+#
+###############################
 
-if using eval (nice):
-
-def compare(x, y)
-  case [x, y]
-  in [Integer, Integer]
-    x <=> y
-  in [Array, Array]
-    (0...[x.size, y.size].min).each do |i|
-      res = compare(x[i], y[i])
-      return res if res != 0
-    end
-    x.size <=> y.size
-  else
-    compare([x].flatten(1), [y].flatten(1))
+def is_in_order?(pack_a, pack_b) # returns 1 if in_order, -1 if not, and 0 if undecided
+  if pack_a.size == 0
+    return 0 if pack_b.size == 0
+    return 1 if pack_b.size > 0
   end
+  return -1 if pack_b.size == 0
+
+  ret_val = 0
+  a = pack_a.shift
+  b = pack_b.shift
+
+  case [a, b]
+    in [Array, Array]
+      ret_val = is_in_order?(a, b)
+    in [Integer, Integer]
+      return 1 if a < b
+      return -1 if a > b
+    in [Array, Integer]
+      ret_val = is_in_order?(a, [b])
+    in [Integer, Array]
+      ret_val = is_in_order?([a], b)
+  end
+  return ret_val != 0 ? ret_val : is_in_order?(pack_a, pack_b)
 end
 
+sum = 0
+all_pairs.each_with_index do |p, ii|
+  a, b = p.split("\n")
 
+  ret_val = is_in_order?(eval(a), eval(b))
+  sum += ii + 1 if ret_val == 1
+end
+puts sum
+
+#part 2
+all_lines = File.read('day_13_input.txt').split("\n").delete_if { |l| l.chomp == "" }
+all_lines << "[[2]]"
+all_lines << "[[6]]"
+
+sorted_lines = all_lines.sort { |i,j| is_in_order?(eval(i), eval(j)) }.reverse
+puts (sorted_lines.index("[[2]]") + 1) * (sorted_lines.index("[[6]]") + 1)
