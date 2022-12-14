@@ -88,9 +88,16 @@ class Grid
   def drop_sand_p2
     dropped = 0
 
+    stack = []
     while true
-      sx, sy = 500, 0
+      if stack.size > 0
+        sx, sy = stack.last[0], stack.last[1]
+        stack.pop
+      else
+        sx, sy = 500, 0
+      end
       while m = get_move_p2(sx,sy)
+        stack << [sx, sy]
         sx += m[0]
         sy += m[1]
         m = get_move_p2(sx,sy)
@@ -106,7 +113,7 @@ class Grid
   end
 end
 
-puts "\e[H\e[2J" # clear the terminal for more fun
+# puts "\e[H\e[2J" # clear the terminal for more fun
 
 g = Grid.new(all_lines)
 p1 = g.drop_sand
@@ -115,6 +122,6 @@ puts p1
 # reset the grid! (duh!)
 g2 = Grid.new(all_lines)
 p2 = g2.drop_sand_p2
-g2.get_info
+# g2.get_info
 puts p2
 
