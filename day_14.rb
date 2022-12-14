@@ -8,9 +8,9 @@ class Grid
   def initialize(in_lines)
     @grid = {}
     in_lines.each do |line|
-      line.split(" -> "). each_cons(2) do |pairs|
-        src = pairs[0].split(",").map(&:to_i)
-        dst = pairs[1].split(",").map(&:to_i)
+      line.split(" -> "). each_cons(2) do |pair|
+        src = pair[0].split(",").map(&:to_i)
+        dst = pair[1].split(",").map(&:to_i)
 
         stx, endx = [src[0], dst[0]].minmax
         sty, endy = [src[1], dst[1]].minmax
@@ -38,16 +38,11 @@ class Grid
   end
 
   def get_info # show (a part of) the map
-    puts "X: #{@min_x} - #{@max_x}"
-    puts "Y: #{@min_y} - #{@max_y}"
-    0.upto(@max_y) do |y|
+    puts "\e[H" # clear the terminal for more fun
+    0.upto(@max_y + 2) do |y|
       line = ""
-      @min_x.upto(@max_x) do |x|
-        if @grid.has_key?(key_for(x,y))
-          line += @grid[key_for(x,y)]
-        else
-          line += "."
-        end
+      (@min_x - 150).upto(@max_x + 130) do |x|
+        line += @grid.has_key?(key_for(x,y)) ? @grid[key_for(x,y)] : " "
       end
       puts line
     end
@@ -77,6 +72,8 @@ class Grid
       end
       @grid[key_for(sx,sy)] = "O"
       dropped += 1
+
+      # self.get_info
     end
   end
 
@@ -104,14 +101,15 @@ class Grid
       if sx == 500 && sy == 0
         return dropped
       end
+      # self.get_info
     end
   end
 end
 
+puts "\e[H\e[2J" # clear the terminal for more fun
+
 g = Grid.new(all_lines)
-g.get_info
 p1 = g.drop_sand
-g.get_info
 puts p1
 
 # reset the grid! (duh!)
