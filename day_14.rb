@@ -54,7 +54,7 @@ class Grid
   end
 
   def is_occupied?(x, y)
-    @grid.has_key?(key_for(x, y)) || (y == @max_y + 2)
+    @grid.has_key?(key_for(x, y))
   end
 
   def get_move(x,y)
@@ -64,12 +64,10 @@ class Grid
   def drop_sand
     dropped = 0
 
-    is_flowing = false
     while true
       sx, sy = 500, 0
 
-      m = get_move(sx,sy)
-      while !m.nil?
+      while m = get_move(sx,sy)
         sx += m[0]
         sy += m[1]
         if sy > @max_y # sand is flowing
@@ -95,8 +93,7 @@ class Grid
 
     while true
       sx, sy = 500, 0
-      m = get_move_p2(sx,sy)
-      while !m.nil?
+      while m = get_move_p2(sx,sy)
         sx += m[0]
         sy += m[1]
         m = get_move_p2(sx,sy)
@@ -112,13 +109,14 @@ class Grid
 end
 
 g = Grid.new(all_lines)
+g.get_info
 p1 = g.drop_sand
-# g.get_info
+g.get_info
 puts p1
 
 # reset the grid! (duh!)
 g2 = Grid.new(all_lines)
 p2 = g2.drop_sand_p2
-# g2.get_info
+g2.get_info
 puts p2
 
