@@ -9,7 +9,6 @@ all_lines.each do |line|
   sensor = [all_ints[0], all_ints[1]]
   dist = (all_ints[0] - all_ints[2]).abs + (all_ints[1] - all_ints[3]).abs
 
-#  dists << (all_ints[0] - all_ints[2]).abs + (all_ints[1] - all_ints[3]).abs
   sensors[sensor] = dist
   beacons << [all_ints[2], all_ints[3]]
 end
@@ -29,8 +28,7 @@ count = 0
 
 (min_x - max_d).upto(max_x + max_d) do |x|
   if is_covered?(sensors, x, y)
-#    if !sensors.include?([x,y]) && !beacons.include?([x,y])
-    if !beacons.include?([x,y])
+    if !sensors.include?([x,y]) && !beacons.include?([x,y])
       count += 1
     end
   end
@@ -50,18 +48,13 @@ sensors.each do |s, dist|
     the_x = s_x + delta_x
     next if the_x < 0 || the_x > limit
 
-    the_y1 = s_y + delta_y
-    next if the_y1 < 0 || the_y1 > limit
-    if !is_covered?(sensors, the_x, the_y1)
-      puts  the_x * 4000000 + the_y1
-      exit
-    end
-
-    the_y2 = s_y - delta_y
-    next if the_y2 < 0 || the_y2 > limit
-    if !is_covered?(sensors, the_x, the_y2)
-      puts the_x * 4000000 + the_y2
-      exit
+    [-1, 1].each do |sign|
+      the_y = s_y + sign * delta_y
+      next if the_y < 0 || the_y > limit
+      if !is_covered?(sensors, the_x, the_y)
+        puts  the_x * 4000000 + the_y
+        exit
+      end
     end
   end
 end
