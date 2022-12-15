@@ -28,7 +28,7 @@ count = 0
 
 (min_x - max_d).upto(max_x + max_d) do |x|
   if is_covered?(sensors, x, y)
-    if !sensors.include?([x,y]) && !beacons.include?([x,y])
+    if !sensors.keys.include?([x,y]) && !beacons.include?([x,y])
       count += 1
     end
   end
