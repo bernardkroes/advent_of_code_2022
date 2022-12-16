@@ -113,8 +113,6 @@ seen = {}
 all_possible_moves(valves["AA"], valves, []).each do |my_move|
   all_possible_moves(valves["AA"], valves, []).each do |elephant_move|
     the_keys =  [["AA", "AA", [], my_move, elephant_move, 0],
-                 ["AA", "AA", [], elephant_move, my_move, 0],
-                 ["AA", "AA", [], my_move, elephant_move, 0],
                  ["AA", "AA", [], elephant_move, my_move, 0]]
 
     work_queue << ["AA", "AA", [], my_move, elephant_move, 0, 1] # valve, valve of elephant, opened, move, move of elephan, total_pressure, minute
