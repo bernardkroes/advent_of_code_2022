@@ -9,6 +9,16 @@ all_lines.each do |line|
   sensor = [all_ints[0], all_ints[1]]
   dist = (all_ints[0] - all_ints[2]).abs + (all_ints[1] - all_ints[3]).abs
 
+  # compose the four 'edge_1' lines
+  #
+  # create two lines from this point (sensor[0] + dist + 1, sensor[1])
+  # y = x + a1
+  # y = -x + a3
+  #
+  # create two lines from this point (sensor[0] - (dist + 1), sensor[1])
+  # y = x + a2
+  # y = -x + a4
+
   sensors[sensor] = dist
   beacons << [all_ints[2], all_ints[3]]
 end
@@ -59,3 +69,8 @@ sensors.each do |s, dist|
   end
 end
 
+# part 2 - faster:
+# per sensor:
+# - create 4 "edge + 1" borders: y = x + a1/a2 and y = -x + a3/a4
+# - per sensor pair determine all the line crossings and see if they are on both sensor edges (by checking the manhattan dists)
+# - if so, check if that point is not covered by any sensor
