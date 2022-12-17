@@ -87,9 +87,9 @@ while work_queue.size > 0
     all_possible_moves(my_valve, valves, open_valves).each do |move|
       the_key = [my_valve.name, open_valves.sort, move, pressure, the_minute]
       if !seen.has_key?(the_key)
+         seen[the_key] = 1
         if pressure > max_pressure_per_minute[the_minute - 1] - top_rates_summed
           work_queue << [my_valve.name, open_valves.dup, move, pressure, the_minute]
-          seen[the_key] = 1
         end
       end
     end
@@ -149,9 +149,9 @@ while work_queue.size > 0
                      [elephant_valve.name, my_valve.name, open_valves.sort, my_move, elephant_move, pressure],
                      [elephant_valve.name, my_valve.name, open_valves.sort, elephant_move, my_move, pressure]]
         if !the_keys.any? { |k| seen.has_key?(k) }
+          the_keys.each { |k| seen[k] = 1 }
           if pressure > max_pressure_per_minute[the_minute - 1] - top_rates_summed
             work_queue << [my_valve.name, elephant_valve.name, open_valves.dup, my_move, elephant_move, pressure, the_minute]
-            the_keys.each { |k| seen[k] = 1 }
           end
         end
       end
