@@ -28,16 +28,11 @@ all_lines.each do |line|
 end
 
 def all_possible_moves(valve, valves, open_valves)
+  return ["noop"] if all_valves_with_rate_open?(valves, open_valves)
+
   moves = []
-  if !all_valves_with_rate_open?(valves, open_valves)
-    if (valve.rate > 0) && !open_valves.include?(valve.name)
-      moves << "open"
-    end
-    moves = moves + valve.tunnels
-  else
-    moves << "noop" # do nothing
-  end
-  return moves
+  moves << "open" if (valve.rate > 0) && !open_valves.include?(valve.name)
+  return moves + valve.tunnels
 end
 
 def all_valves_with_rate_open?(valves, open_valves)
