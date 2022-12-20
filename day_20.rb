@@ -4,17 +4,14 @@ ii = []
 original_zero_index = -1
 mix.each_with_index do |m, i|
   ii << [m,i]
-  if m == 0
-    original_zero_index = i
-  end
+  original_zero_index = i if m == 0
 end
 the_size = ii.size
 
 mix.each_with_index do |m, i|
   found_i = ii.find_index([m,i])
   ii.delete_at(found_i)
-  di = found_i + m
-  dest = di % (the_size - 1)
+  dest = (found_i + m) % (the_size - 1)
   dest -= 1 if dest <= 0
 
   ii.insert(dest, [m,i])
@@ -30,9 +27,7 @@ original_zero_index = -1
 mix.each_with_index do |m, i|
   mix[i] = m * 811589153
   ii << [m * 811589153,i]
-  if m == 0
-    original_zero_index = i
-  end
+  original_zero_index = i if m == 0
 end
 the_size = ii.size
 
@@ -40,8 +35,7 @@ the_size = ii.size
   mix.each_with_index do |m, i|
     found_i = ii.find_index([m, i])
     ii.delete_at(found_i)
-    di = found_i + m
-    dest = di % (the_size - 1)
+    dest = (found_i + m) % (the_size - 1)
     dest -= 1 if dest <= 0
 
     ii.insert(dest, [m,i])
