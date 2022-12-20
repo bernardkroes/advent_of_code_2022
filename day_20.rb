@@ -40,14 +40,3 @@ end
 
 i_zero = ii.find_index([0,original_zero_index])
 puts ii[(i_zero + 1000) % the_size][0] + ii[(i_zero + 2000) % the_size][0] + ii[(i_zero + 3000) % the_size][0]
-
-__END__
-1623178306 / 811589153 -> 2
-# part 2
--10945091317358 -> incorrect
-
-# part 1
--12575 -> incorrect
--23295 -> incorrect
-5710 -> too low
-6136 -> incorrect
