@@ -49,7 +49,6 @@ def quality
   @max_geode * @num
 end
 
-# assumption: never build more than one robot at a time
 # possible optimization: it makes no sense to build more 'clay' robots if all that clay cannot be spent on building another robot
 def possible_moves
   base_move = [@ore, @clay, @obsidian, @geode, @ore_robots_count, @clay_robots_count, @obsidian_robots_count, @geode_robots_count, @minute]
@@ -128,7 +127,8 @@ def simulate(end_minute)
           seen_key = key_for(m)
           if !seen.has_key?(seen_key)
             seen[seen_key] = 1
-            work_queue.unshift(m) #  << m
+            # dfs: insert at front
+            work_queue.unshift(m)
           end
         end
       end
