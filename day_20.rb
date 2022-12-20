@@ -12,8 +12,6 @@ mix.each_with_index do |m, i|
   found_i = ii.find_index([m,i])
   ii.delete_at(found_i)
   dest = (found_i + m) % (the_size - 1)
-  dest -= 1 if dest <= 0
-
   ii.insert(dest, [m,i])
 end
 
@@ -36,8 +34,6 @@ the_size = ii.size
     found_i = ii.find_index([m, i])
     ii.delete_at(found_i)
     dest = (found_i + m) % (the_size - 1)
-    dest -= 1 if dest <= 0
-
     ii.insert(dest, [m,i])
   end
 end
