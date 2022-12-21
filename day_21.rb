@@ -32,14 +32,14 @@ def value_for(monkeys, monkey_name)
   elsif v[1] == "-"
     return value_for(monkeys, v[2]) - value_for(monkeys, v[3])
   elsif v[1] == "/"
-    return value_for(monkeys, v[2]) / value_for(monkeys, v[3])
+    return value_for(monkeys, v[2]) * 1.0 / value_for(monkeys, v[3]) * 1.0
   elsif v[1] == "*"
     return value_for(monkeys, v[2]) * value_for(monkeys, v[3])
   else
     return v[0]
   end
 end
-puts value_for(monkeys, "root")
+puts value_for(monkeys, "root").to_i
 
 # part 2
 
