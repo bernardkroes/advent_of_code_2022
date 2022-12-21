@@ -24,83 +24,49 @@ all_lines.each do |line|
   end
   monkeys[name] = [the_num, oper, in1, in2]
 end
-monkeys_orig = monkeys.dup # make a copy for part 2
 
-while monkeys["root"][0] == 0
-  monkeys.each do |k,v|
-    if v[0] == 0 && v[1] != ""
-      if monkeys[v[2]][0] > 0 && monkeys[v[3]][0] > 0
-        res = 0
-        if v[1] == "+"
-          res = monkeys[v[2]][0] + monkeys[v[3]][0]
-        elsif v[1] == "-"
-          res = monkeys[v[2]][0] - monkeys[v[3]][0]
-        elsif v[1] == "/"
-          res = monkeys[v[2]][0] / monkeys[v[3]][0]
-        elsif v[1] == "*"
-          res = monkeys[v[2]][0] * monkeys[v[3]][0]
-        end
-        monkeys[k] = [res, v[1], v[2], v[3]]
-      end
-    end
+def value_for(monkeys, monkey_name)
+  v = monkeys[monkey_name]
+  if v[1] == "+"
+    return value_for(monkeys, v[2]) + value_for(monkeys, v[3])
+  elsif v[1] == "-"
+    return value_for(monkeys, v[2]) - value_for(monkeys, v[3])
+  elsif v[1] == "/"
+    return value_for(monkeys, v[2]) / value_for(monkeys, v[3])
+  elsif v[1] == "*"
+    return value_for(monkeys, v[2]) * value_for(monkeys, v[3])
+  else
+    return v[0]
   end
 end
-puts monkeys["root"][0]
+puts value_for(monkeys, "root")
 
 # part 2
 
 def root_diff_value_for_humn(monkeys, humn)
-  monkeys["root"][1] = "="
+  monkeys["root"][1] = "-"
   monkeys["humn"][0] = humn
 
-  the_loop_count = 0
-  while monkeys["root"][0] == 0 && the_loop_count < 100 # enough cycles to process a value for root, if this value is zero, we stop at 100
-    monkeys.each do |k,v|
-      if v[0] == 0 && v[1] != ""
-        if monkeys[v[2]][0] > 0 && monkeys[v[3]][0] > 0
-          res = 0
-          if v[1] == "="
-            if monkeys[v[2]][0] == monkeys[v[3]][0]
-              puts "#{humn}"
-              exit
-            else
-              return monkeys[v[2]][0] - monkeys[v[3]][0]
-            end
-          elsif v[1] == "+"
-            res = monkeys[v[2]][0] + monkeys[v[3]][0]
-          elsif v[1] == "-"
-            res = monkeys[v[2]][0] - monkeys[v[3]][0]
-          elsif v[1] == "/"
-            res = monkeys[v[2]][0] / monkeys[v[3]][0]
-          elsif v[1] == "*"
-            res = monkeys[v[2]][0] * monkeys[v[3]][0]
-          end
-          monkeys[k] = [res, v[1], v[2], v[3]]
-        end
-      end
-    end
-    the_loop_count += 1
-  end
-  return -1
+  return value_for(monkeys, "root")
 end
 
 # played around with humn values: conclusion: we can play the lower/higher guess game
 guess_num_low  =           1000 # a start value that gives us a positive value for both inputs for root
 guess_num_high = 99999999999999 # high enough!!!
 
-monkeys = monkeys_orig.dup
-
 while true
   # just calculate all the values again, because computers!
-  val_low = root_diff_value_for_humn(monkeys.dup, guess_num_low)
-  val_mid = root_diff_value_for_humn(monkeys.dup, (guess_num_low + guess_num_high) / 2)
-  val_high = root_diff_value_for_humn(monkeys.dup, guess_num_high)
+  val_low = root_diff_value_for_humn(monkeys, guess_num_low)
+  val_mid = root_diff_value_for_humn(monkeys, (guess_num_low + guess_num_high) / 2)
+  val_high = root_diff_value_for_humn(monkeys, guess_num_high)
   if val_mid < 0
     guess_num_high = (guess_num_low + guess_num_high) / 2
-  else
+  elsif val_mid > 0
     guess_num_low = (guess_num_low + guess_num_high) / 2
+  else
+    puts "#{(guess_num_low + guess_num_high) / 2}"
+    exit
   end
-  # puts "#{guess_num_low} - #{guess_num_high}"
 end
 
 __END__
