@@ -51,8 +51,8 @@ def root_diff_value_for_humn(monkeys, humn)
 end
 
 # played around with humn values: conclusion: we can play the lower/higher guess game
-guess_num_low  =           1000 # a start value that gives us a positive value for both inputs for root
-guess_num_high = 99999999999999 # high enough!!!
+guess_num_low  =    0       # a start value that gives us a positive value for both inputs for root
+guess_num_high = 1e13.to_i  # high enough!!!
 
 while true
   # just calculate all the values again, because computers!
