@@ -3,7 +3,7 @@ RIGHT = 0
 DOWN = 1
 LEFT = 2
 UP = 3
-FACE_SIZE = 50
+FACE_SIZE = 50 # mentioned on description page
 
 class Grid
 attr_accessor :grid, :cur_dir, :x_pos, :y_pos
@@ -43,12 +43,14 @@ def cube_move(steps, in_dir)# returns new x and y and dir
     x_tile, y_tile =  the_x / FACE_SIZE, the_y / FACE_SIZE
     next_x_tile, next_y_tile =  next_x / FACE_SIZE, next_y / FACE_SIZE
 
-    if (next_x_tile != x_tile) || (next_y_tile != y_tile)
-      # wrap
+    if (next_x_tile != x_tile) || (next_y_tile != y_tile) # wrap
       x_in_tile = the_x % FACE_SIZE
       y_in_tile = the_y % FACE_SIZE
 
-      wrappings = { # [tile_from_x, tile_from_y, dir] => [tile_to_x, tile_to_y, dir, operation (what to add and/or revert), new direction determines where to add the operation
+      # [tile_from_x, tile_from_y, dir] =>
+      #   [tile_to_x, tile_to_y, new dir, operation]
+      #   operation: what to add/subtract, new direction: also determines where to add the operation
+      wrappings = { 
         [1, 0, LEFT] => [0, 2, RIGHT, "-y"],
         [1, 0, UP] => [0, 3, RIGHT, "x"],
 
