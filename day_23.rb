@@ -28,7 +28,7 @@ def grid_minmax_y(grid)
   grid.keys.collect { |k| k[1] }.minmax
 end
 
-def do_round(grid, out_grid, first_check_dir)
+def do_round(grid, first_check_dir)
   moves = {} # next moves
   skip_moves = []
 
@@ -58,7 +58,7 @@ def do_round(grid, out_grid, first_check_dir)
           the_dest = [the_x + the_dest_move[0], the_y + the_dest_move[1]]
           if !skip_moves.include?(the_dest)
             if !moves.values.include?(the_dest)
-              moves[ [the_x, the_y] ] = the_dest
+              moves[k] = the_dest
             else
               moves.delete_if { |k,v| v == the_dest }
               skip_moves << the_dest
@@ -69,22 +69,14 @@ def do_round(grid, out_grid, first_check_dir)
       end
     end
   end
-
-  num_moved = 0
-  grid.each do |k,v|
-    nx, ny = k[0], k[1]
-    if moves.has_key?([nx, ny])
-      the_dest = moves[ [nx, ny] ]
-      out_grid[the_dest] = "#"
-      num_moved += 1
-    else
-      out_grid[k] = "#"
-    end
-  end
-  if num_moved == 0
+  if moves.size == 0
     exit
   end
-  out_grid
+
+  moves.each do |k,v|
+    grid[moves[k]] = "#"
+    grid.delete(k)
+  end
 end
 
 def show_grid(grid)
@@ -110,13 +102,10 @@ round = 1
 
 # 10.times do                     # use this line for part 1
 while true                        # use this line for part 2
-  the_new_grid = {}
   puts "stepping round #{round}"
 
-  do_round(grid, the_new_grid, first_check_dir)
+  do_round(grid, first_check_dir)
   round += 1
-  grid = the_new_grid
-  # show_grid(grid)
 
   first_check_dir = (first_check_dir + 1) % 4
 end
