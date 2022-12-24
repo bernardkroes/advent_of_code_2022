@@ -135,10 +135,10 @@ def shortest_path(grids, start_x, start_y, dst_x, dst_y, start_minute)
       shortest = the_minute if the_minute < shortest
     elsif the_minute < shortest
       the_minute += 1
-      all_moves = possible_moves(grids[the_minute + 1], next_x, next_y, )
+      all_moves = possible_moves(grids[the_minute + 1], next_x, next_y)
       all_moves.each do |next_m|
         if !seen.has_key?([next_x, next_y, next_m, the_minute])
-#          work_queue.unshift([next_x, next_y, next_m, the_minute + 1 ])    # use this for DFS
+#          work_queue.unshift([next_x, next_y, next_m, the_minute ])        # use this for DFS
           work_queue << [next_x, next_y, next_m, the_minute ]               # use this for BFS (faster for my input and implementation)
           seen[[next_x, next_y, next_m, the_minute]] = 1
         end
